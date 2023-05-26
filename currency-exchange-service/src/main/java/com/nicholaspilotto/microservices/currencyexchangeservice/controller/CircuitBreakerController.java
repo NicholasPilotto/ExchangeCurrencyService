@@ -1,6 +1,8 @@
 package com.nicholaspilotto.microservices.currencyexchangeservice.controller;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,9 @@ public class CircuitBreakerController {
 
   @GetMapping("/sample-api")
 //  @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
-  @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+//  @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+//  @RateLimiter(name = "default")
+  @Bulkhead(name = "sample-api")
   public String sampleApi() {
     logger.info("Sample API call received");
     ResponseEntity<String> forEntity = new RestTemplate().
